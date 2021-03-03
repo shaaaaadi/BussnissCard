@@ -79,8 +79,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#C3C3F3"
+        android:background="@drawable/shadow_button"
+        android:drawableLeft = "@drawable/contact_small"
         android:textSize="25dp"
-        android:text="בחר איש קשר"/>
+        android:text="אנשי הקשר שלי"/>
 
 </LinearLayout>

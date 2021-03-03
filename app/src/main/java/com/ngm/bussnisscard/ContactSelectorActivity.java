@@ -1,10 +1,12 @@
 package com.ngm.bussnisscard;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -109,7 +111,6 @@ public class ContactSelectorActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case 1001:
 
@@ -144,14 +145,31 @@ public class ContactSelectorActivity extends AppCompatActivity {
 
     }
 
-    void sendMessage(Context ctx, String phoneNumber, String messageType){
+    void sendMessage(final Context ctx, final String phoneNumber, String messageType){
         if(messageType.toLowerCase().equals("whatsapp")){
             CommonMethods.openWhatsApp(ctx, phoneNumber, message);
             finish();
         }
         else if (messageType.toLowerCase().equals("standard")){
-            CommonMethods.sendSms(ctx, phoneNumber, message);
-            finish();
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            CommonMethods.sendSms(ctx, phoneNumber, message);
+                            finish();
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage (String.format("האם אתה בטוח שברצונך לשלוח הודעה ל %s?", phoneNumber)).setPositiveButton("שלח", dialogClickListener)
+                    .setNegativeButton("ביטול", dialogClickListener).show();
         }
     }
 
