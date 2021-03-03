@@ -154,16 +154,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume(){
-        Bundle bund = getIntent().getExtras();
-
-        if(bund != null && bund.getString("LAUNCH").equals("YES")){
-            startService(new Intent(MainActivity.this, MainService.class));
-        }
-        super.onResume();
-    }
-
     private void CancelBatteryOpt(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();

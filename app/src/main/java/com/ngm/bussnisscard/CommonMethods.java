@@ -127,7 +127,7 @@ public final class CommonMethods {
         Toast.makeText(ctx, "SMS Sent", Toast.LENGTH_LONG).show();
     }
 
-    public static Contact getLastCall(Context ctx, int requestedCallType){
+    public static Contact getLastCall(Context ctx, int requestedCallType, int pos){
         Log.d("LastCall", "Requested: " + requestedCallType);
         Cursor managedCursor = ctx.getContentResolver().query(CallLog.Calls.CONTENT_URI, null,
                 null, null, null);
@@ -144,6 +144,11 @@ public final class CommonMethods {
             Log.d("LastCall", "getLastCall: " + dircode);
 
             if(dircode == requestedCallType){
+                if(pos > 0){
+                    pos--;
+                    managedCursor.moveToPrevious();
+                    continue;
+                }
                 Log.d("LastCall", "Found");
                 Contact contact = new Contact();
                 contact.Name = name;

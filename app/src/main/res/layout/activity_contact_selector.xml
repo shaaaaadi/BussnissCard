@@ -5,87 +5,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="10"
     tools:context=".ContactSelectorActivity">
 
     <LinearLayout
         android:layoutDirection="rtl"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_weight="3"
+        android:layout_height="0dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="שיחה נכנסת אחרונה"
-            android:textSize="30sp"
+            android:text="שיחות נכנסות אחרונות"
+            android:textSize="25dp"
             android:textStyle="bold"/>
-        <TextView
-            android:id="@+id/last_incoming_call"
+
+        <ListView
+            android:id="@+id/incoming_numbers_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"/>
+            android:layout_height="0dp"
+            android:background="#d5d5e9"
+            android:layout_weight="9.2"/>
+
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#000"/>
 
     <LinearLayout
         android:layoutDirection="rtl"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_weight="3"
+        android:layout_height="0dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="שיחה יוצאת אחרונה"
-            android:textSize="30sp"
+            android:text="שיחות יוצאות אחרונות"
+            android:textSize="25dp"
             android:textStyle="bold"/>
-        <TextView
-            android:id="@+id/last_outgoing_call"
+        <ListView
+            android:id="@+id/outgoing_numbers_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"/>
+            android:layout_height="0dp"
+            android:background="#d5d5e9"
+            android:layout_weight="9.2"/>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#000"/>
 
     <LinearLayout
         android:layoutDirection="rtl"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_weight="3"
+        android:layout_height="0dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="שיחה אחרונה שלא נענתה"
-            android:textSize="30sp"
+            android:text="שיחות אחרונות שלא נענו"
+            android:textSize="25dp"
             android:textStyle="bold"/>
-        <TextView
-            android:id="@+id/last_missed_call"
+        <ListView
+            android:id="@+id/missed_numbers_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"/>
+            android:layout_height="0dp"
+            android:background="#d5d5e9"
+            android:layout_weight="9.2"/>
+
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#000"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
 
     <Button
         android:id="@+id/btn_get_contact"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#C3C3F3"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:text="בחר איש קשר"/>
 
 </LinearLayout>
