@@ -122,6 +122,13 @@ public class IncommingCallReceiver extends BroadcastReceiver {
                 ring = false;
                 callAnswered = false;
                 outgoingCall = false;
+
+                //Check if service stil not stopped, stop it
+                boolean isServiceRunning = isMyServiceRunning(MainService.class);
+                if(isServiceRunning){
+                    Log.d("MyPhoneListener","Stopping floating button");
+                    StopMainService(5);
+                }
             }
         }
 
