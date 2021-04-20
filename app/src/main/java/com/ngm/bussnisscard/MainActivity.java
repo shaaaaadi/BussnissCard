@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     EditText userMessageEditText, urlEditText;
     String userMessageStr = "";
     String urlStr = "";
+    TextView labelVersion;
 
     final int DRAW_OVER_OTHER_APP_PERMISSION = 101;
     private static final int PERMISSION_REQUEST_CODE = 200;
@@ -61,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
             settingsButton = findViewById(R.id.btn_settings);
             userMessageEditText = findViewById(R.id.edit_text_user_msg);
             urlEditText = findViewById(R.id.edit_text_url);
+            labelVersion = findViewById(R.id.version_label);
+
+            //Get version name and set it in version label
+            String versionName = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName;
+            labelVersion.setText(labelVersion.getText() + " " + versionName);
 
             //Set default visibility
             editArea.setVisibility(View.GONE);
