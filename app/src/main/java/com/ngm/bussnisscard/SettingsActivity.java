@@ -3,11 +3,13 @@ package com.ngm.bussnisscard;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import org.json.JSONException;
@@ -27,7 +29,10 @@ public class SettingsActivity extends AppCompatActivity {
     String settingsFilePath;
 
     public enum ContactType {NONE, NON_CONTACTS_ONLY, ALL_NUMBERS};
+    public enum WhatsappType {NONE, WHATSAPP, WHATSAPP_BUSINESS};
+
     CheckBox chkboxAfterMissedCall, chkboxAfterCallEnded;
+    RadioButton whatsappRadioButton, whatsappBusinessRadioButton;
     Spinner contactTypeSpinner;
 
     @Override
@@ -81,54 +86,42 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
         });
-    }
 
-    SettingsEntry readSettings(String settingsPath){
-        //Default settings
-        SettingsEntry s = new SettingsEntry();
-        s.CheckAfterCallEnd = false;
-        s.CheckAfterMissedCall = false;
-        s.ContactType = ContactType.NONE;
+        whatsappRadioButton = findViewById(R.id.radio_btn_whatsapp);
+        whatsappBusinessRadioButton = findViewById(R.id.radio_btn_whatsapp_b);
 
-        try {
-            File file = new File(settingsPath);
-            if(!file.exists()){//return default settings
-                return s;
-            }
-
-            FileReader fileReader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            StringBuilder stringBuilder = new StringBuilder();
-            String line = null;
-            line = bufferedReader.readLine();
-            while (line != null){
-                stringBuilder.append(line).append("\n");
-                line = bufferedReader.readLine();
-            }
-            bufferedReader.close();
-
-            try {
-                // This responce will have Json Format String
-                String responce = stringBuilder.toString();
-                JSONObject jsonObject  = new JSONObject(responce);
-                s.CheckAfterCallEnd = (boolean)jsonObject.get(SettingsEntry.KEY_SEND_AFTER_CALL_END);
-                s.CheckAfterMissedCall = (boolean)jsonObject.get(SettingsEntry.KEY_SEND_AFTER_MISSED_CALL);
-
-                switch ((int)jsonObject.get(SettingsEntry.KEY_CONTACT_TYPE)){
-                    case 1: s.ContactType = ContactType.NON_CONTACTS_ONLY; break;
-                    case 2: s.ContactType = ContactType.ALL_NUMBERS; break;
-                    default: s.ContactType = ContactType.NONE; break;
+        whatsappRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //Cancel the check of the other radio button
+                if(b){
+                    whatsappBusinessRadioButton.setChecked(false);
+                    Log.d("Settings", "onCheckedChanged: WhatsApp selected");
+                    onLoadSetting.WhatsappType = WhatsappType.WHATSAPP;
+                    saveSettings(onLoadSetting);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return s;
             }
+        });
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return s;
-        }
-        return s;
+        whatsappBusinessRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                //Cancel the check of the other radio button
+                if(b){
+                    whatsappRadioButton.setChecked(false);
+                    Log.d("Settings", "onCheckedChanged: WhatsApp Business selected");
+                    onLoadSetting.WhatsappType = WhatsappType.WHATSAPP_BUSINESS;
+                    saveSettings(onLoadSetting);
+                }
+
+            }
+        });
+
+        //Check the appropriate radio button according to the settings file
+        if(onLoadSetting.WhatsappType == WhatsappType.WHATSAPP)
+            whatsappRadioButton.setChecked(true);
+        else if (onLoadSetting.WhatsappType == WhatsappType.WHATSAPP_BUSINESS)
+            whatsappBusinessRadioButton.setChecked(true);
     }
 
     void saveSettings(SettingsEntry s){
@@ -137,6 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
             jsonObject.put(SettingsEntry.KEY_SEND_AFTER_CALL_END, s.CheckAfterCallEnd);
             jsonObject.put(SettingsEntry.KEY_SEND_AFTER_MISSED_CALL, s.CheckAfterMissedCall);
             jsonObject.put(SettingsEntry.KEY_CONTACT_TYPE, s.ContactType.ordinal());
+            jsonObject.put(SettingsEntry.WHATSAPP_TYPE, s.WhatsappType.ordinal());
         } catch (JSONException e) {
             e.printStackTrace();
         }
