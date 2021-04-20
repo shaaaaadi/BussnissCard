@@ -102,6 +102,8 @@ public final class CommonMethods {
         return true;
     }
     public static void openWhatsApp(Context ctx, String phoneNumber, String message) {
+        SettingsActivity.WhatsappType whatsappType = readSettings(settingsPath).WhatsappType;
+
         if(phoneNumber.startsWith("0"))
             phoneNumber = phoneNumber.substring(1, phoneNumber.length());
         String smsNumber = "972" + phoneNumber;
@@ -113,7 +115,7 @@ public final class CommonMethods {
             sendIntent.setType("text/plain");
             sendIntent.putExtra(Intent.EXTRA_TEXT, message);
             sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
-            sendIntent.setPackage("com.whatsapp");
+            sendIntent.setPackage(whatsappType == SettingsActivity.WhatsappType.WHATSAPP_BUSINESS ? "com.whatsapp.w4b" : "com.whatsapp");
             sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ctx.startActivity(sendIntent);
         } catch(Exception e) {
@@ -188,6 +190,7 @@ public final class CommonMethods {
         s.CheckAfterCallEnd = false;
         s.CheckAfterMissedCall = false;
         s.ContactType = SettingsActivity.ContactType.NONE;
+        s.WhatsappType = SettingsActivity.WhatsappType.NONE;
 
         try {
             File file = new File(settingsPath);
@@ -218,6 +221,13 @@ public final class CommonMethods {
                     case 2: s.ContactType = SettingsActivity.ContactType.ALL_NUMBERS; break;
                     default: s.ContactType = SettingsActivity.ContactType.NONE; break;
                 }
+
+                switch ((int)jsonObject.get(SettingsEntry.WHATSAPP_TYPE)){
+                    case 1: s.WhatsappType = SettingsActivity.WhatsappType.WHATSAPP; break;
+                    case 2: s.WhatsappType = SettingsActivity.WhatsappType.WHATSAPP_BUSINESS; break;
+                    default: s.WhatsappType = SettingsActivity.WhatsappType.NONE; break;
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 return s;
